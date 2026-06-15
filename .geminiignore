@@ -1,0 +1,11 @@
+node_modules/
+dist/
+build/
+bin/
+aegis-mcp
+package-lock.json
+frontend/package-lock.json
+go.sum
+.git/
+.planning/
+config/audit.db
