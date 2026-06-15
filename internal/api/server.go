@@ -80,6 +80,10 @@ func NewServer(
 	mux.HandleFunc("GET /api/audit", server.handleAudit)
 	mux.HandleFunc("GET /api/summary", server.handleSummary)
 
+	// Serve static files from the 'ui' directory
+	fs := http.FileServer(http.Dir("./ui"))
+	mux.Handle("/", http.StripPrefix("/", fs))
+
 	return server.withMiddleware(mux)
 }
 

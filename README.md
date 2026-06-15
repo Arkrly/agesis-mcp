@@ -56,6 +56,16 @@ The project includes a modern React 19 dashboard ("HackCulture" theme) to monito
 
 ---
 
+## 🚀 Deployment
+
+### Railway (Recommended)
+Aegis-MCP is optimized for one-click deployment on **Railway**.
+1. Connect this GitHub repository to [Railway](https://railway.app/).
+2. Railway will automatically detect the `Dockerfile` and build a unified production image.
+3. The dashboard will be served directly at your assigned Railway domain.
+
+---
+
 ## 📖 Documentation
 
 - **[Getting Started](docs/GETTING_STARTED.md)**: Detailed setup and first-request guide.

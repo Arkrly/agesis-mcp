@@ -74,7 +74,12 @@ type AuditConfig struct {
 // LoadFromEnv reads configuration from environment variables.
 func LoadFromEnv() (Config, error) {
 	cfg := Config{
-		ListenAddr:        getEnv("AEGIS_LISTEN_ADDR", defaultListenAddr),
+		ListenAddr: func() string {
+			if port := os.Getenv("PORT"); port != "" {
+				return ":" + port
+			}
+			return getEnv("AEGIS_LISTEN_ADDR", defaultListenAddr)
+		}(),
 		UpstreamURL:       os.Getenv("AEGIS_UPSTREAM_URL"),
 		UpstreamTimeout:   defaultUpstreamTimeout,
 		ReadTimeout:       defaultReadTimeout,
