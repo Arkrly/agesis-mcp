@@ -1,0 +1,62 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  --color-primary: #4953F5;
+  --color-primary-70: #6A72F7;
+  --color-primary-40: #AAB0FB;
+  --color-secondary: #FFFFFF;
+  --color-tertiary: #374151;
+  --color-neutral: #F1F4F8;
+  --color-surface: #FFFFFF;
+  --color-surface-muted: #F7F8FC;
+  --color-on-surface: #0F1729;
+  --color-border: #E5E7EB99;
+  --color-overlay: #121212;
+  --color-error: #D92D20;
+
+  --font-sans: "Space Grotesk", sans-serif;
+
+  --spacing-xs: 6px;
+  --spacing-sm: 16px;
+  --spacing-md: 28px;
+  --spacing-lg: 40px;
+  --spacing-xl: 58px;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium tracking-tight;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-secondary text-tertiary font-bold py-2 px-4 rounded-md h-[44px] min-w-[140px] flex items-center justify-center transition-colors hover:bg-surface-muted;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent text-secondary border border-secondary font-bold py-2 px-4 rounded-sm h-[44px] min-w-[140px] flex items-center justify-center transition-colors hover:bg-white/10;
+  }
+
+  .card {
+    @apply bg-neutral text-on-surface p-md rounded-lg border border-border/50 shadow-sm;
+  }
+
+  .input {
+    @apply bg-surface text-on-surface border border-border/50 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/40;
+  }
+
+  .chip {
+    @apply bg-primary-40 text-secondary text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest;
+  }
+}
