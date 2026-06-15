@@ -43,7 +43,6 @@ RUN echo '#!/bin/sh' > entrypoint.sh && \
 # Environment Defaults for Railway
 ENV AEGIS_LISTEN_ADDR=:8080
 ENV AEGIS_UPSTREAM_URL=http://localhost:9090/mcp
-ENV AEGIS_JWT_SHARED_SECRET=hackathon-demo-secret-key-12345
 ENV AEGIS_POLICY_FILE=config/policy.rego
 
 EXPOSE 8080
