@@ -26,6 +26,14 @@ npm run dev
 
 The Dashboard will be available at `http://localhost:5173`.
 
+### 2.1 Testing with Mock MCP Server
+We provide a lightweight mock server for testing purposes. It implements basic tools like `echo` and `get_system_info`.
+
+- **Address**: `http://localhost:9090/mcp`
+- **Run independently**: `npm run mock-mcp`
+
+When running `npm run dev`, this mock server starts automatically, and Aegis-MCP is pre-configured in the example `.env` to point to it.
+
 ## 3. Backend Setup
 
 If you want to run the backend individually:

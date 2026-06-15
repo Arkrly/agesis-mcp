@@ -4,7 +4,8 @@
   "scripts": {
     "backend": "go run cmd/aegis-mcp/main.go",
     "frontend": "npm run dev --prefix frontend",
-    "dev": "concurrently -n \"backend,frontend\" -c \"blue,magenta\" \"npm run backend\" \"npm run frontend\""
+    "mock-mcp": "go run test/mock-mcp/main.go",
+    "dev": "concurrently -n \"backend,frontend,mock\" -c \"blue,magenta,yellow\" \"npm run backend\" \"npm run frontend\" \"npm run mock-mcp\""
   },
   "devDependencies": {
     "concurrently": "^9.1.0"
