@@ -2,7 +2,7 @@ node_modules/
 dist/
 build/
 bin/
-aegis-mcp
+/aegis-mcp
 package-lock.json
 frontend/package-lock.json
 go.sum

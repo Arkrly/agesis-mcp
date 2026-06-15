@@ -10,7 +10,7 @@ coverage/
 dist/
 build/
 bin/
-aegis-mcp
+/aegis-mcp
 
 # Misc
 .DS_Store

@@ -4,7 +4,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o aegis-mcp ./cmd/aegis-mcp
+RUN CGO_ENABLED=0 GOOS=linux go build -o aegis-mcp ./cmd/aegis-mcp/main.go
 RUN CGO_ENABLED=0 GOOS=linux go build -o mock-mcp ./test/mock-mcp/main.go
 
 # Step 2: Build React Frontend
