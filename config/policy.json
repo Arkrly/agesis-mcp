@@ -1,0 +1,53 @@
+{
+  "default_allow": false,
+  "semantic": {
+    "minimum_safety_score": 0.35,
+    "blocked_intents": [
+      "prompt_injection",
+      "jailbreak_attempt",
+      "malicious_code_generation",
+      "secret_exfiltration"
+    ]
+  },
+  "rules": [
+    {
+      "name": "allow-tools-list",
+      "effect": "allow",
+      "methods": ["tools/list"],
+      "roles": ["developer", "admin", "auditor"]
+    },
+    {
+      "name": "allow-resources-list",
+      "effect": "allow",
+      "methods": ["resources/list"],
+      "roles": ["developer", "admin", "auditor"]
+    },
+    {
+      "name": "allow-resources-read",
+      "effect": "allow",
+      "methods": ["resources/read"],
+      "roles": ["developer", "admin"]
+    },
+    {
+      "name": "allow-read-file",
+      "effect": "allow",
+      "methods": ["tools/call"],
+      "tools": ["read_file", "echo", "get_system_info"],
+      "roles": ["developer", "admin"]
+    },
+    {
+      "name": "allow-search",
+      "effect": "allow",
+      "methods": ["tools/call"],
+      "tools": ["search", "list_files"],
+      "roles": ["developer", "admin", "auditor"]
+    },
+    {
+      "name": "allow-admin-destructive-tools",
+      "effect": "allow",
+      "methods": ["tools/call"],
+      "tools": ["delete_file", "exec_command", "run_shell"],
+      "roles": ["admin"]
+    }
+  ]
+}
