@@ -1,126 +1,73 @@
-# Aegis-MCP
+# Aegis-MCP: Zero-Trust Security Gateway for AI Agents
 
-[![Go Version](https://img.shields.io/badge/Go-1.26+-00ADD8?style=flat&logo=go)](https://go.dev/)
-[![CI](https://github.com/yourorg/aegis-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/yourorg/aegis-mcp/actions)
+Aegis-MCP is a secure proxy for AI agents communicating via the **Model Context Protocol (MCP)**. It provides a zero-trust security layer that intercepts, inspects, and authorizes every request before it reaches your MCP servers.
 
-**Aegis-MCP** is a zero-trust security gateway for AI agents communicating over the Model Context Protocol (MCP). 
+## 🚀 Quick Start (One Command)
 
-It acts as an intelligent HTTP proxy that intercepts MCP traffic, validates JSON-RPC payloads, authenticates callers via JWT, enforces fine-grained RBAC using Open Policy Agent (OPA), and performs semantic inspection to block malicious prompts (like prompt injection, jailbreaks, and secret exfiltration).
-
-> [!IMPORTANT]
-> **Never trust, always verify.** Every single MCP request passing through Aegis-MCP is inspected, evaluated, and explicitly authorized before being forwarded to your backend MCP servers.
-
-## Features
-
-- **Zero-Trust Architecture**: Deny-by-default routing ensures only explicitly authorized traffic reaches your MCP servers.
-- **Fine-Grained Authorization**: Integrated Open Policy Agent (OPA) evaluates Rego policies against the request context, JWT claims, and semantic intents.
-- **Semantic Prompt Inspection**: Built-in heuristic engine identifies and blocks prompt injection, malicious code generation, and secret exfiltration attempts. (Future support planned for local quantized LLMs).
-- **Strong Authentication**: Requires standard JWTs (HS256) with strict validation of claims (`exp`, `nbf`, `aud`, `iss`, and custom `agent_id` or `roles`).
-- **Resilience & Protection**: Protects upstream services with per-agent rate limiting (token bucket) and configurable request body size limits.
-- **Observability**: Exposes Prometheus metrics, structured JSON logging, and maintains a durable, persistent audit log of all decisions via BoltDB.
-
-## Request Lifecycle
-
-1. **Ingress**: Receives HTTP POST to `/mcp`. Enforces content-type and payload size limits.
-2. **Decoding**: Validates the JSON-RPC 2.0 structure and extracts the targeted MCP method and tool.
-3. **Authentication**: Extracts and cryptographically verifies the bearer token (JWT).
-4. **Semantic Inspection**: Analyzes the prompt text to score safety and categorize intent.
-5. **Policy Evaluation**: OPA evaluates the `policy.rego` rules using the agent's identity, roles, tool requested, and semantic inspection results.
-6. **Decision & Audit**: The decision is durably logged to a local BoltDB database.
-7. **Egress**: If fully authorized, the proxy forwards the payload to the configured upstream MCP server, preserving necessary session headers.
-
-## Getting Started
-
-### Prerequisites
-
-- [Go](https://go.dev/) 1.26.4 or higher.
-
-### Installation
-
-Clone the repository and build the binary:
+To run the entire stack (Proxy + Dashboard + Mock MCP Server):
 
 ```bash
-git clone https://github.com/yourorg/aegis-mcp.git
-cd aegis-mcp
-go build -o aegis-mcp ./cmd/aegis-mcp
+git clone git@github.com:Arkrly/agesis-mcp.git
+cd agesis-mcp
+npm install
+npm run dev
 ```
 
-### Configuration
+- **Gateway/Proxy**: `http://localhost:8080`
+- **Management Dashboard**: `http://localhost:5173`
+- **Mock MCP Server**: `http://localhost:9090` (for testing)
 
-Aegis-MCP is primarily configured via environment variables.
+---
 
-1. Copy the example environment file:
-   ```bash
-   cp config/aegis.env.example .env
-   ```
+## 🏗️ Architecture
 
-2. Edit `.env` to set your upstream URL and JWT secret:
-   ```ini
-   AEGIS_LISTEN_ADDR=:8080
-   AEGIS_UPSTREAM_URL=http://127.0.0.1:9090/mcp
-   AEGIS_JWT_SHARED_SECRET=your-super-secret-key
-   AEGIS_POLICY_FILE=config/policy.rego
-   ```
+Aegis-MCP sits between your AI Agents (clients) and your MCP Servers.
 
-> [!NOTE]
-> See [CONFIG.md](./CONFIG.md) for a complete list of all supported environment variables, timeouts, and metrics configurations.
-
-### Running the Gateway
-
-Load your environment variables and start the server:
-
-```bash
-set -a
-source .env
-set +a
-
-./aegis-mcp
+```text
+AI Agent  ──>  Aegis-MCP Gateway  ──>  Policy Engine (OPA)  ──>  Real MCP Server
+                (Port 8080)             (Rego Rules)              (Upstream)
 ```
 
-The gateway will start and bind to the configured `AEGIS_LISTEN_ADDR`.
+1.  **Intercept**: Validates MCP JSON-RPC structure.
+2.  **Authenticate**: Verifies caller identity via HS256 JWT tokens.
+3.  **Inspect**: Performs semantic analysis on prompts to detect injections/jailbreaks.
+4.  **Authorize**: Evaluates Open Policy Agent (OPA) rules for RBAC and tool-level access.
+5.  **Audit**: Logs every decision to a persistent BoltDB database.
 
-## Usage
+---
 
-Once running, point your AI Agents to Aegis-MCP instead of directly to your MCP servers.
+## 📊 Management Dashboard
 
-### Endpoints
+The project includes a modern React 19 dashboard ("HackCulture" theme) to monitor your gateway:
+- **Real-time Status**: Monitor proxy and component health.
+- **Security Audit**: View a detailed table of allowed and blocked requests.
+- **Policy Preview**: Visualize and draft new security rules.
 
-- `POST /mcp`
-  The primary proxy endpoint. Requires a valid `Authorization: Bearer <token>` header. Evaluates policies and forwards traffic to the upstream URL.
-  
-- `GET /metrics`
-  Prometheus-compatible metrics exposing request counters, latencies, and detailed denial reasons.
+---
 
-- `GET /live`
-  Liveness probe. Returns `200 OK` if the HTTP server is responsive.
+## 🛠️ Components
 
-- `GET /ready`
-  Readiness probe. Returns `200 OK` if all dependencies (like the OPA policy engine and semantic inspector) have loaded successfully. Returns `503 Service Unavailable` otherwise.
+| Component | Path | Description |
+| --- | --- | --- |
+| **Backend** | `/internal` | Go core implementing the proxy and security logic. |
+| **Dashboard** | `/frontend` | React + Tailwind v4 management console. |
+| **Mock Server**| `/test/mock-mcp` | Lightweight MCP server for integration testing. |
+| **Policies** | `/config` | Rego (OPA) rules and JSON data for authorization. |
 
-## Policies
+---
 
-Aegis-MCP uses standard Rego files for authorization. A default `policy.rego` is provided in the `config/` directory.
+## 📖 Documentation
 
-By default, the engine operates in **fail-closed** mode. You must explicitly define `allow` rules based on methods, tools, roles, and agent IDs. The policy engine automatically hot-reloads when the `policy.rego` file is modified on disk.
+- **[Getting Started](docs/GETTING_STARTED.md)**: Detailed setup and first-request guide.
+- **[API Reference](docs/API_REFERENCE.md)**: Endpoint documentation and status codes.
+- **[Policy Writing](docs/POLICY_WRITING.md)**: How to write custom Rego security rules.
+- **[Configuration](CONFIG.md)**: Full list of environment variables and settings.
 
-## Development
+---
 
-To run both the backend (Go) and the React dashboard together in development mode:
+## 🛡️ Security Features
 
-1. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
-
-2. **Start Services**:
-   ```bash
-   npm run dev
-   ```
-
-This launches:
-- **Backend API**: `http://localhost:8080` (requires environment variables from `.env`)
-- **Frontend Dashboard**: `http://localhost:5173`
-
-Individual services can also be run via:
-- `npm run backend`
-- `npm run frontend`
+- **Semantic Guardrails**: Heuristic detection of malicious intent (Phase 4 LLM integration ready).
+- **Fine-Grained RBAC**: Restrict tools (e.g., `read_file` vs `delete_file`) based on agent roles.
+- **Rate Limiting**: Protect upstream servers from token exhaustion/abuse.
+- **Fail-Closed Design**: If security components fail, the gateway denies all traffic.
