@@ -4,7 +4,9 @@ Aegis-MCP is a secure proxy for AI agents communicating via the **Model Context 
 
 ## 🚀 Quick Start (One Command)
 
-To run the entire stack (Proxy + Dashboard + Mock MCP Server):
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/deploy?repo=https://github.com/Arkrly/agesis-mcp)
+
+To run the entire stack (Proxy + Dashboard + Mock MCP Server) locally:
 
 ```bash
 git clone git@github.com:Arkrly/agesis-mcp.git
@@ -81,3 +83,12 @@ Aegis-MCP is optimized for one-click deployment on **Railway**.
 - **Fine-Grained RBAC**: Restrict tools (e.g., `read_file` vs `delete_file`) based on agent roles.
 - **Rate Limiting**: Protect upstream servers from token exhaustion/abuse.
 - **Fail-Closed Design**: If security components fail, the gateway denies all traffic.
+
+---
+
+## 🚄 Railway Integration
+
+Aegis-MCP is designed to work seamlessly with **Railway**:
+- **Secure Control Plane**: Protect your official `@railway/mcp-server` by routing its management commands through Aegis-MCP.
+- **Auto-Deploy**: Every push to the `prod` branch on GitHub triggers an automatic redeploy on Railway.
+- **Unified Image**: Serves the React dashboard and Go proxy from a single container.

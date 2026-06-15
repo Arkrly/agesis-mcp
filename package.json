@@ -5,9 +5,11 @@
     "backend": "go run cmd/aegis-mcp/main.go",
     "frontend": "npm run dev --prefix frontend",
     "mock-mcp": "go run test/mock-mcp/main.go",
+    "railway-mcp": "npx -y @railway/mcp-server",
     "dev": "concurrently -n \"backend,frontend,mock\" -c \"blue,magenta,yellow\" \"npm run backend\" \"npm run frontend\" \"npm run mock-mcp\""
   },
   "devDependencies": {
+    "@railway/mcp-server": "^0.1.12",
     "concurrently": "^9.1.0"
   }
 }
