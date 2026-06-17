@@ -1,7 +1,10 @@
 # Aegis-MCP Product Requirements Document
 
 ## Overview
-Aegis-MCP is a zero-trust security gateway for AI agents communicating over the Model Context Protocol (MCP). It acts as an HTTP proxy that intercepts MCP traffic, performs semantic inspection of prompts using local LLMs, enforces RBAC and tool authorization policies via OPA, and makes real-time allow/block decisions.
+Aegis-MCP is a zero-trust security gateway for AI agents communicating over the Model Context Protocol (MCP). It provides a robust, dual-layer defense system:
+
+1.  **Protocol-Level Access Control (RBAC)**: Enforces *who* can access *which* MCP methods, tools, and resources using OPA (Open Policy Agent) for declarative, fine-grained authorization.
+2.  **Content-Level Guardrails (Semantic Inspection)**: Performs semantic analysis of prompt intent and tool arguments using local LLMs/heuristics to block malicious commands, jailbreak attempts, and sensitive data exfiltration *before* they reach your MCP servers.
 
 ## Goals
 1. **Zero-Trust Security**: Never trust, always verify - every MCP request is inspected and authorized

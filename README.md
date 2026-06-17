@@ -1,6 +1,15 @@
-# Aegis-MCP: Zero-Trust Security Gateway for AI Agents
+# Aegis-MCP: Zero-Trust Security for Model Context Protocol
 
-Aegis-MCP is a secure proxy for AI agents communicating via the **Model Context Protocol (MCP)**. It provides a zero-trust security layer that intercepts, inspects, and authorizes every request before it reaches your MCP servers.
+Aegis-MCP is a security-first proxy for the Model Context Protocol (MCP), providing a robust defense-in-depth layer between AI agents and the sensitive resources they access.
+
+## Core Focus: Dual-Layer Security
+
+Aegis-MCP uniquely addresses security at two distinct layers:
+
+1.  **Protocol-Level Access Control (RBAC)**: Enforces who can perform which MCP methods. Using OPA (Open Policy Agent), you can define fine-grained rules based on agent roles and identities (e.g., "only admins can use destructive tools like `delete_file`").
+2.  **Content-Level Guardrails (Semantic Inspection)**: Inspects the *content* of tool calls and prompts for malicious intent, jailbreak attempts, or prompt injections before they reach your MCP servers.
+
+By combining these layers, Aegis-MCP ensures that even if an agent is compromised or "hallucinates" a dangerous command, the request is blocked before any damage occurs.
 
 ## 🚀 Quick Start (One Command)
 

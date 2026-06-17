@@ -4,9 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"mime"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 
@@ -101,10 +103,23 @@ func (s *Server) handleAudit(w http.ResponseWriter, r *http.Request) {
 func (s *Server) handleSummary(w http.ResponseWriter, _ *http.Request) {
 	// Basic health summary for the dashboard
 	status := "ok"
+	components := map[string]string{
+		"proxy":     "healthy",
+		"policy":    "healthy",
+		"audit_log": "healthy",
+		"inference": "healthy",
+	}
+
 	for _, checker := range s.readiness {
 		if err := checker.Ready(); err != nil {
 			status = "degraded"
-			break
+			// Try to identify which component is failing
+			name := fmt.Sprintf("%T", checker)
+			if strings.Contains(name, "Evaluator") {
+				components["policy"] = "unhealthy"
+			} else if strings.Contains(name, "Inspector") {
+				components["inference"] = "unhealthy"
+			}
 		}
 	}
 
@@ -112,11 +127,7 @@ func (s *Server) handleSummary(w http.ResponseWriter, _ *http.Request) {
 		"status":    status,
 		"version":   "v0.1.0",
 		"timestamp": time.Now().UTC(),
-		"components": map[string]string{
-			"proxy":     "healthy",
-			"policy":    "healthy",
-			"audit_log": "healthy",
-		},
+		"components": components,
 	}
 	writeJSON(w, http.StatusOK, summary)
 }

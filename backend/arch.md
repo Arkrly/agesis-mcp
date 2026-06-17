@@ -1,7 +1,7 @@
 # Aegis-MCP Backend Architecture
 
 ## System Overview
-Aegis-MCP functions as an HTTP proxy that sits between MCP clients and servers, intercepting and inspecting all MCP traffic. The system follows a modular pipeline architecture where each stage processes the request sequentially.
+Aegis-MCP functions as a security-first HTTP proxy that sits between MCP clients and servers. It enforces dual-layer security: **protocol-level RBAC** (via OPA) and **content-level semantic guardrails** (via heuristic/LLM inspection). The system follows a modular pipeline architecture where each stage processes the request sequentially to ensure zero-trust verification of every interaction.
 
 ## Component Diagram (ASCII)
 ```
