@@ -2,9 +2,22 @@
 
 Aegis-MCP is a secure proxy for AI agents communicating via the **Model Context Protocol (MCP)**. It provides a zero-trust security layer that intercepts, inspects, and authorizes every request before it reaches your MCP servers.
 
+## 🤝 Contributing
+
+We welcome contributions from the community! Whether you are fixing a bug, adding a feature, or improving documentation, your help is appreciated.
+
+Please see our [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for details on how to get involved.
+
+## 📄 License
+
+Aegis-MCP is licensed under the [Apache License 2.0](LICENSE).
+
+---
+
 ## 🚀 Quick Start (One Command)
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/deploy?repo=https://github.com/Arkrly/agesis-mcp)
+[![Deploy on Railway]
+(https://railway.app/button.svg)](https://railway.app/template/deploy?repo=https://github.com/Arkrly/agesis-mcp)
 
 To run the entire stack (Proxy + Dashboard + Mock MCP Server) locally:
 
