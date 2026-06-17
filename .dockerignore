@@ -1,0 +1,12 @@
+.git
+node_modules
+frontend/node_modules
+dist
+frontend/dist
+bin
+aegis-mcp
+mock-mcp
+*.db
+.env
+.idea
+.vscode

@@ -1,5 +1,6 @@
 # Step 1: Build Go Backend & Mock MCP
 FROM golang:1.25-alpine AS go-builder
+RUN apk add --no-cache git ca-certificates tzdata
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
@@ -13,16 +14,16 @@ WORKDIR /app
 COPY frontend/package*.json ./
 RUN npm install
 COPY frontend/ ./
-# Set API URL to empty so it uses the same host in production
 RUN echo "VITE_API_URL=" > .env
 RUN npm run build
 
 # Step 3: Final Production Image
-FROM alpine:latest
+FROM alpine:3.21
 WORKDIR /app
 
-# Install dependencies for the entrypoint script
-RUN apk add --no-cache ca-certificates
+# Copy certificates and timezone data from builder to avoid network dependency in final stage
+COPY --from=go-builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=go-builder /usr/share/zoneinfo /usr/share/zoneinfo
 
 # Copy Go binaries
 COPY --from=go-builder /app/aegis-mcp .
@@ -40,7 +41,7 @@ RUN echo '#!/bin/sh' > entrypoint.sh && \
     echo './aegis-mcp # Start main gateway in foreground' >> entrypoint.sh && \
     chmod +x entrypoint.sh
 
-# Environment Defaults for Railway
+# Environment Defaults
 ENV AEGIS_LISTEN_ADDR=:8080
 ENV AEGIS_UPSTREAM_URL=http://localhost:9090/mcp
 ENV AEGIS_POLICY_FILE=config/policy.rego

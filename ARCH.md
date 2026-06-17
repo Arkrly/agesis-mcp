@@ -146,26 +146,15 @@ type RPCError struct {
 OPA receives a JSON input with the following structure:
 ```json
 {
-  "request": {
-    "method": "string",
-    "params": {},
-    "id": null,
-    "jsonrpc": "2.0"
+  "method": "string",
+  "tool": "string (optional, from params.tool)",
+  "auth": {
+    "agent_id": "string",
+    "roles": ["string", ...]
   },
-  "agent": {
-    "id": "string",
-    "roles": ["string", ...],
-    "metadata": {}
-  },
-  "session": {
-    "id": "string",
-    "created_at": "timestamp",
-    "metadata": {}
-  },
-  "semantic_inspection": {
+  "inspection": {
     "safety_score": 0.0,
-    "intent_categories": ["string", ...],
-    "timestamp": "timestamp"
+    "intent_categories": ["string", ...]
   }
 }
 ```

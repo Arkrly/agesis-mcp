@@ -12,65 +12,47 @@ Never trust, always verify - every MCP request is inspected and authorized befor
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Intercept MCP traffic via HTTP proxy
+- [x] Perform semantic inspection (Heuristic V1)
+- [x] Enforce RBAC and tool authorization via OPA
+- [x] Real-time allow/block decisions
+- [x] JWT-based authentication
+- [x] Audit trail with BoltDB
+- [x] Prometheus metrics and structured logging
+- [x] Docker-based deployment
 
 ### Active
 
-- [ ] Intercept MCP traffic via HTTP proxy
-- [ ] Perform semantic inspection of prompts using local LLM
-- [ ] Enforce RBAC policies via OPA for agent authorization
-- [ ] Enforce tool authorization policies via OPA
-- [ ] Make real-time allow/block decisions
-- [ ] Provide JWT-based authentication for gateway access
-- [ ] Deploy as Docker container
-- [ ] Maintain audit trail using embedded database (BoltDB)
-- [ ] Implement CI/CD pipeline with GitHub Actions
-- [ ] Ensure fully open-source implementation
+- [ ] Real local LLM integration (llama.cpp)
+- [ ] Comprehensive documentation (v0.1.0)
+- [ ] Final security hardening and threat modeling
+- [ ] Release automation (GitHub Actions)
 
 ### Out of Scope
 
-- [MCP protocol implementation] — Aegis-MCP assumes MCP is implemented by clients/servers; it only proxies and secures existing MCP traffic
-- [LLM training/fine-tuning] — Uses pre-trained LLMs for inspection but doesn't include model training capabilities
-- [Identity provider replacement] — Integrates with existing JWT-based auth rather than replacing identity systems
-- [Network-level security] — Focuses on application-layer security; assumes transport security (TLS) is handled separately
-- [Multi-tenant SaaS platform] — Designed for self-hosted deployment; not a hosted service offering
+- [MCP protocol implementation] — Aegis-MCP assumes MCP is implemented by clients/servers.
+- [LLM training/fine-tuning] — Uses pre-trained LLMs.
+- [Identity provider replacement] — Integrates with existing JWT-based auth.
+- [Multi-tenant SaaS platform] — Designed for self-hosted deployment.
 
 ## Context
 
-- Target deployment: Docker containers for ease of deployment and isolation
-- Authentication: JWT tokens for securing the gateway itself
-- Authorization: Role-based (RBAC) with predefined roles in OPA
-- Semantic inspection: Local/open-source LLMs (e.g., Llama 3 8B or Mistral 7B) for privacy and predictable latency
-- Persistence: Embedded database (BoltDB) for policy metadata and audit logs
-- CI/CD: GitHub Actions for automated testing, building, and deployment
-- Team size: Small core team (2-3 developers) with community contributions
-- Timeline: Targeting MVP in 3 months, production-ready in 6 months
-- Open-source commitment: Fully open-source implementation to foster community adoption
-
-## Constraints
-
-- **[Deployment]**: Docker containers — Matches infrastructure requirements and ensures consistent deployment
-- **[Auth]**: JWT Tokens — Integrates with existing identity systems and is stateless for scalability
-- **[OPA]**: Role-based (RBAC) with predefined roles — Provides clear authorization model that's easy to audit and manage
-- **[LLM]**: Local/open-source — Ensures privacy (no prompt leakage), predictable latency/cost, and offline operation
-- **[Persistence]**: Embedded database (BoltDB) — Zero-configuration, ACID transactions, and excellent read performance for audit trails
-- **[CI/CD]**: GitHub Actions — Leverages existing GitHub repository for streamlined DevOps
-- **[License]**: Fully open-source — Encourages community contributions and transparency
-- **[Timeline]**: 3-6 months for MVP to production — Balances thoroughness with market readiness
-- **[Team]**: Small core team (2-3 developers) — Focuses on core functionality before expanding scope
+- **Progress**: ~85% complete. Core infrastructure, auth, policy engine, and observability are fully implemented.
+- **Next Steps**: Phase 4 (Real LLM) and Phase 8 (Documentation).
+- **Timeline**: Targeting v0.1.0 release soon.
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Zero-trust security model for MCP | Addresses growing security concerns with AI agent communications | — Pending |
-| HTTP proxy architecture | Enables easy deployment without requiring changes to existing MCP clients/servers | — Pending |
-| Local LLM for semantic inspection | Protects sensitive prompts from external exposure and provides predictable performance | — Pending |
-| OPA for policy enforcement | Industry-standard for cloud-native authorization with strong ecosystem and performance | — Pending |
-| Embedded database (BoltDB) | Zero-configuration storage for audit trails and policy metadata | — Pending |
-| JWT authentication | Stateless, widely adopted, and easy to integrate with existing identity providers | — Pending |
-| GitHub Actions CI/CD | Tight integration with repository hosting for automated testing and deployment | — Pending |
-| Fully open-source implementation | Fosters community trust, adoption, and contributions | — Pending |
+| Zero-trust security model | Addresses growing security concerns with AI agent communications | COMPLETED |
+| HTTP proxy architecture | Enables easy deployment without requiring changes to existing MCP clients/servers | COMPLETED |
+| Local LLM for semantic inspection | Protects sensitive prompts and provides predictable performance | PARTIAL (Heuristic V1) |
+| OPA for policy enforcement | Industry-standard for cloud-native authorization | COMPLETED |
+| Embedded database (BoltDB) | Zero-configuration storage for audit trails | COMPLETED |
+| JWT authentication | Stateless, widely adopted, and easy to integrate | COMPLETED |
+| GitHub Actions CI/CD | Tight integration with repository hosting | COMPLETED |
+| Fully open-source | Fosters community trust and adoption | COMPLETED |
 
 ---
-*Last updated: Mon Jun 15 2026 after initialization*
+*Last updated: Wed Jun 17 2026*
